@@ -12,9 +12,12 @@
 	<artifactId>elevatemart-security</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>elevatemart-security</name>
-	<description>Microservice contains springsecruity  logics</description>
+	<description>Microservice contains spring-secruity  logics</description>
 	<properties>
 		<java.version>17</java.version>
+		<jjwt.verrsion>0.11.2</jjwt.verrsion>
+		<spring.data.jpa>3.1.5</spring.data.jpa>
+		<jakarta.persistence.api>3.0.0</jakarta.persistence.api>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -27,6 +30,10 @@
 			<artifactId>spring-boot-devtools</artifactId>
 			<scope>runtime</scope>
 			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.mysql</groupId>
@@ -43,6 +50,31 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-core -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-core</artifactId>
+			<version>6.2.0</version>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-impl</artifactId>
+			<version>${jjwt.verrsion}</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.springframework.data/spring-data-jpa -->
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-jpa</artifactId>
+			<version>${spring.data.jpa}</version>
+		</dependency>
+		<dependency>
+			<groupId>jakarta.persistence</groupId>
+			<artifactId>jakarta.persistence-api</artifactId>
+			<version>${jakarta.persistence.api}</version> <!-- Or the version compatible with your Jakarta EE platform -->
+		</dependency>
+
+
+
 	</dependencies>
 
 	<build>
