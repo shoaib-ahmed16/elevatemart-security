@@ -18,6 +18,7 @@
 		<jjwt.verrsion>0.11.2</jjwt.verrsion>
 		<spring.data.jpa>3.1.5</spring.data.jpa>
 		<jakarta.persistence.api>3.0.0</jakarta.persistence.api>
+		<maven.version>3.8.1</maven.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -89,6 +90,15 @@
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven.version}</version> <!-- Adjust version as needed -->
+				<configuration>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
 				</configuration>
 			</plugin>
 		</plugins>
