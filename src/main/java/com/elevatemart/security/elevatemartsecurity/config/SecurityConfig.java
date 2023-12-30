@@ -4,13 +4,16 @@ import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.HeaderWriterLogoutHandler;
@@ -22,6 +25,8 @@ import org.springframework.security.web.savedrequest.RequestCache;
 @EnableWebSecurity
 public class SecurityConfig {
 
+    @Autowired
+    private UnauthorizedEntryPoint unauthorizedEntryPoint;
     @Resource(name = "userService")
     private UserDetailsService userDetailsService;
     private static final String[] AUTH_WHITELIST = {
@@ -30,29 +35,18 @@ public class SecurityConfig {
             "/api/v1/logout"
     };
 
-    @Autowired
-    private UnauthorizedEntryPoint unauthorizedEntryPoint;
-    public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(encoder());
-    }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         RequestCache nullRequestCache = new NullRequestCache();
         HeaderWriterLogoutHandler clearSiteData = new HeaderWriterLogoutHandler(new ClearSiteDataHeaderWriter(ClearSiteDataHeaderWriter.Directive.COOKIES));
         http
-                .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(authorize-> authorize
-                        .requestMatchers(AUTH_WHITELIST)
-                        .permitAll())
-                .csrf(Customizer.withDefaults())
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(AUTH_WHITELIST)
-                        .permitAll()
-                .anyRequest()
-                .authenticated())
+                        .requestMatchers(HttpMethod.POST,AUTH_WHITELIST)
+                        .permitAll().anyRequest().authenticated())
                 .requestCache((cache)->cache.
                         requestCache(nullRequestCache))
-                .logout((logout) -> logout.addLogoutHandler(clearSiteData));
+                .csrf(csrf->csrf.disable());
         http
                 .sessionManagement(session ->session.
                 sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -64,21 +58,34 @@ public class SecurityConfig {
         return http.build();
     }
 
+
     @Bean
-    public BCryptPasswordEncoder encoder(){
+    public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
 
+    @Bean
+    public InMemoryUserDetailsManager userDetails() {
+        InMemoryUserDetailsManager userDetailsManager = new InMemoryUserDetailsManager();
+        UserDetails admin = User
+                .withUsername("admin")
+                .password("password")
+                .authorities("ADMIN")
+                .build();
 
-//    @Bean
-//    public FilterRegistrationBean<TenantFilter> tenantFilterRegistration(TenantFilter filter) {
-//        FilterRegistrationBean<TenantFilter> registration = new FilterRegistrationBean<>(filter);
-//        registration.setEnabled(false);
-//        return registration;
+        UserDetails user = User
+                .withUsername("user")
+                .password("1234")
+                .authorities("READ")
+                .build();
+        userDetailsManager.createUser(admin);
+        userDetailsManager.createUser(user);
+        return userDetailsManager;
+    }
+
+//
+//    public void configure(AuthenticationManagerBuilder auth) throws Exception {
+//        auth.userDetailsService(userDetailsService).passwordEncoder(encoder());
 //    }
-
-
-
-
 
 }

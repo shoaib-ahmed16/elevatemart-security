@@ -19,7 +19,13 @@ public class RegisterUser {
 
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer id;
+
+    private String firstName;
+    private String lastName;
+    private String countryCode;
+    private String number;
     private String email;
+//    @JsonProperty(access =JsonProperty.Access.WRITE_ONLY)
     private String password;
     private List<String> roles;
 
