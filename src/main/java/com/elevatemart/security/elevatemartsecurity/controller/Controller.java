@@ -1,13 +1,13 @@
 package com.elevatemart.security.elevatemartsecurity.controller;
 
-import com.elevatemart.security.elevatemartsecurity.domain.RegisterUser;
+import com.elevatemart.security.elevatemartsecurity.domain.ElevateMartUser;
 import com.elevatemart.security.elevatemartsecurity.exception.UnknownServerError;
-import com.elevatemart.security.elevatemartsecurity.services.UserService;
 import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,15 +22,14 @@ public class Controller {
 
     @Autowired
     @Resource(name = "userService")
-    private UserService userService;
+    private UserDetailsService userService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
     @PostMapping("/signUp")
-    public ResponseEntity<String> signUpUser(@RequestBody RegisterUser user){
+    public ResponseEntity<String> signUpUser(@RequestBody ElevateMartUser user){
         if(Objects.nonNull(user)){
             user.setPassword(passwordEncoder.encode(user.getPassword()));
-            userService.registerUser(user);
             return  new ResponseEntity<>("User is created and successfully saved in Database.", HttpStatus.OK);
         }
         throw new UnknownServerError("Getting Null value of the Object!");

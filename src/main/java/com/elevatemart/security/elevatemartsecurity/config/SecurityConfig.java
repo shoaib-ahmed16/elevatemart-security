@@ -46,14 +46,12 @@ public class SecurityConfig {
                         .permitAll().anyRequest().authenticated())
                 .requestCache((cache)->cache.
                         requestCache(nullRequestCache))
-                .csrf(csrf->csrf.disable());
-        http
+                .csrf(csrf->csrf.disable())
                 .sessionManagement(session ->session.
                 sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .maximumSessions(2)
-                .maxSessionsPreventsLogin(true));
-        http
-                .addFilterBefore(new CORSFilter(),JwtAuthenticationFilter.class)
+                .maxSessionsPreventsLogin(true))
+                //.addFilterBefore(new CORSFilter(),JwtAuthenticationFilter.class)
                 .addFilterBefore(new JwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }

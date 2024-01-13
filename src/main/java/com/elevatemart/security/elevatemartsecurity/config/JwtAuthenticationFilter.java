@@ -1,7 +1,7 @@
 package com.elevatemart.security.elevatemartsecurity.config;
 
 import com.elevatemart.security.elevatemartsecurity.exception.UnknownServerError;
-import com.elevatemart.security.elevatemartsecurity.exception.UserAutheticationFailException;
+import com.elevatemart.security.elevatemartsecurity.exception.ElevateMartUserAuthenticationFailException;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.SignatureException;
 import jakarta.annotation.Resource;
@@ -47,13 +47,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 username = jwtTokenUtil.getUsernameFromToken(authToken);
             } catch (IllegalArgumentException e) {
                 logger.error("An error occurred while fetching Username from Token", e);
-                throw new UserAutheticationFailException("An error occurred while fetching Username from Token "+ e);
+                throw new ElevateMartUserAuthenticationFailException("An error occurred while fetching Username from Token "+ e);
             } catch (ExpiredJwtException e) {
                 logger.warn("The token has expired", e);
-                throw new UserAutheticationFailException("The token has expired. Please Login again "+ e);
+                throw new ElevateMartUserAuthenticationFailException("The token has expired. Please Login again "+ e);
             } catch(SignatureException e){
                 logger.error("Authentication Failed. Username or Password not valid.");
-                throw new UserAutheticationFailException("Authentication Failed. Username or Password not valid.");
+                throw new ElevateMartUserAuthenticationFailException("Authentication Failed. Username or Password not valid.");
             }
         } else {
             logger.warn("Couldn't find bearer string, header will be ignored");
