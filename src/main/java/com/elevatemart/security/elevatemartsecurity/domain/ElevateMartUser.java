@@ -29,6 +29,7 @@ public class ElevateMartUser {
     private String countryCode;
     private String number;
     private String address;
+    private String role;
 
 
 }

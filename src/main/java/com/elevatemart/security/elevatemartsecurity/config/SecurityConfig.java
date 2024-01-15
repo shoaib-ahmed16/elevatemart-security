@@ -1,5 +1,6 @@
 package com.elevatemart.security.elevatemartsecurity.config;
 
+import com.elevatemart.security.elevatemartsecurity.services.customization.CustomizeAuthenticatioProvider;
 import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -26,8 +27,9 @@ public class SecurityConfig {
 
 //    @Autowired
 //    private UnauthorizedEntryPoint unauthorizedEntryPoint;
-    @Resource(name = "userService")
-    private UserDetailsService userDetailsService;
+
+//    @Autowired
+//    private UserDetailsService userDetailsService;
     private static final String[] AUTH_WHITELIST = {
             "/api/v1/register", // login point api
     };
@@ -40,7 +42,9 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(authorize-> authorize
                         .requestMatchers(HttpMethod.POST,AUTH_WHITELIST)
-                        .permitAll().anyRequest().authenticated())
+                        .permitAll()
+                        .requestMatchers("/swagger-ui*/**","v3/api-docs/**").permitAll()
+                        .anyRequest().authenticated())
                 .requestCache((cache)->cache.
                         requestCache(nullRequestCache))
                 .csrf(csrf->csrf.disable())

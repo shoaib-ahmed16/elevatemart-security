@@ -2,6 +2,7 @@ package com.elevatemart.security.elevatemartsecurity.controller;
 
 import com.elevatemart.security.elevatemartsecurity.domain.ElevateMartUser;
 import com.elevatemart.security.elevatemartsecurity.services.ElevateMartUserDetailsService;
+import com.elevatemart.security.elevatemartsecurity.services.customization.CustomizeAuthenticatioProvider;
 import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,9 +18,9 @@ import java.util.List;
 @RequestMapping("/api/v1")
 public class Controller {
 
-    @Autowired
-    @Resource(name = "userService")
-    private UserDetailsService userService;
+//    @Autowired
+//    private UserDetailsService userService;
+
 
     @Autowired
     private PasswordEncoder passwordEncoder;
