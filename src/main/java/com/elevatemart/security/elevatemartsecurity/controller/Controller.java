@@ -1,7 +1,7 @@
 package com.elevatemart.security.elevatemartsecurity.controller;
 
 import com.elevatemart.security.elevatemartsecurity.domain.ElevateMartUser;
-import com.elevatemart.security.elevatemartsecurity.exception.UnknownServerError;
+import com.elevatemart.security.elevatemartsecurity.services.ElevateMartUserDetailsService;
 import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,15 +9,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Objects;
+import java.util.List;
 
 @RestController
-@RequestMapping("api/v1")
+@RequestMapping("/api/v1")
 public class Controller {
 
     @Autowired
@@ -26,21 +23,37 @@ public class Controller {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-    @PostMapping("/signUp")
-    public ResponseEntity<String> signUpUser(@RequestBody ElevateMartUser user){
-        if(Objects.nonNull(user)){
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            return  new ResponseEntity<>("User is created and successfully saved in Database.", HttpStatus.OK);
-        }
-        throw new UnknownServerError("Getting Null value of the Object!");
-    }
-    @PostMapping("/login")
-    public ResponseEntity<String> loginUser(Authentication auth){
-        System.out.println(auth);
-        return  new ResponseEntity<>("User Login Successfully."+auth.getName(),HttpStatus.OK);
-    }
-    @PostMapping("/logout")
-    public  void logout(){
 
+    @Autowired
+    @Resource(name = "elevateMartUserDetailsService")
+    private ElevateMartUserDetailsService eleMarDetService;
+
+    @GetMapping("/hello")
+    @ResponseStatus(HttpStatus.OK)
+   public String testHandler(){
+        return  "Welcome to Spring Security.";
+    }
+    @PostMapping("/register")
+    public ResponseEntity<ElevateMartUser> saveElevateMartUser(@RequestBody ElevateMartUser martUser){
+        martUser.setPassword(passwordEncoder.encode(martUser.getPassword()));
+        ElevateMartUser user=eleMarDetService.registerUser(martUser);
+        return new ResponseEntity<>(user,HttpStatus.CREATED);
+    }
+
+    @GetMapping("/customer/{email}")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public ResponseEntity<ElevateMartUser> getElevateMartUserByEmail(@PathVariable("email") String email){
+        return  new ResponseEntity<>(eleMarDetService.getMartUserDetailsByEmail(email),HttpStatus.ACCEPTED);
+    }
+    @GetMapping("/customers")
+    public ResponseEntity<List<ElevateMartUser>> getAllElevateMartUsers(){
+        return  new ResponseEntity<List<ElevateMartUser>>(eleMarDetService.getAllMartUserDetails(),HttpStatus.BAD_REQUEST);
+    }
+    @GetMapping("/signIn")
+    public ResponseEntity<String> getLoggedInUserDetailsHandler(Authentication auth){
+
+        System.out.println(auth);
+        ElevateMartUser user = eleMarDetService.getMartUserDetailsByEmail(auth.getName());
+        return new ResponseEntity<>(user.getFirstName()+user.getLastName()+" Logged In Successfully!!!",HttpStatus.ACCEPTED);
     }
 }

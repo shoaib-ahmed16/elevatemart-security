@@ -1,10 +1,5 @@
 package com.elevatemart.security.elevatemartsecurity.config;
 
-import jakarta.servlet.*;
-import jakarta.servlet.http.HttpServletResponse;
-
-import java.io.IOException;
-
 public class CORSFilter
 {}
 /*

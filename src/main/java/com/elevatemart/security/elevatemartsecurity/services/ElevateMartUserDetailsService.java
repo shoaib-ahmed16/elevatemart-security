@@ -1,9 +1,7 @@
 package com.elevatemart.security.elevatemartsecurity.services;
 
 import com.elevatemart.security.elevatemartsecurity.domain.ElevateMartUser;
-import com.elevatemart.security.elevatemartsecurity.exception.DatabaseUnknownServerError;
 import com.elevatemart.security.elevatemartsecurity.exception.ElevateMartUserException;
-import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
 

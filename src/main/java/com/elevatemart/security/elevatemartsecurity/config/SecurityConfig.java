@@ -5,8 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,24 +15,21 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.HeaderWriterLogoutHandler;
 import org.springframework.security.web.header.writers.ClearSiteDataHeaderWriter;
 import org.springframework.security.web.savedrequest.NullRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
 
 @Configuration
-@EnableWebSecurity
+//@EnableWebSecurity
 public class SecurityConfig {
 
-    @Autowired
-    private UnauthorizedEntryPoint unauthorizedEntryPoint;
+//    @Autowired
+//    private UnauthorizedEntryPoint unauthorizedEntryPoint;
     @Resource(name = "userService")
     private UserDetailsService userDetailsService;
     private static final String[] AUTH_WHITELIST = {
-            "/api/v1/signup", //entry point api
-            "/api/v1/login", // login point api
-            "/api/v1/logout"
+            "/api/v1/register", // login point api
     };
 
 
@@ -47,12 +44,14 @@ public class SecurityConfig {
                 .requestCache((cache)->cache.
                         requestCache(nullRequestCache))
                 .csrf(csrf->csrf.disable())
+                .formLogin(Customizer.withDefaults())
+                .httpBasic(Customizer.withDefaults())
                 .sessionManagement(session ->session.
                 sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .maximumSessions(2)
-                .maxSessionsPreventsLogin(true))
+                .maxSessionsPreventsLogin(true));
                 //.addFilterBefore(new CORSFilter(),JwtAuthenticationFilter.class)
-                .addFilterBefore(new JwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+//                .addFilterBefore(new JwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
@@ -62,24 +61,6 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
-    public InMemoryUserDetailsManager userDetails() {
-        InMemoryUserDetailsManager userDetailsManager = new InMemoryUserDetailsManager();
-        UserDetails admin = User
-                .withUsername("admin")
-                .password("password")
-                .authorities("ADMIN")
-                .build();
-
-        UserDetails user = User
-                .withUsername("user")
-                .password("1234")
-                .authorities("READ")
-                .build();
-        userDetailsManager.createUser(admin);
-        userDetailsManager.createUser(user);
-        return userDetailsManager;
-    }
 
 //
 //    public void configure(AuthenticationManagerBuilder auth) throws Exception {

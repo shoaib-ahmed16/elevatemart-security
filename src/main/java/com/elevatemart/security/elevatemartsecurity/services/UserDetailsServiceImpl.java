@@ -2,7 +2,7 @@ package com.elevatemart.security.elevatemartsecurity.services;
 
 import com.elevatemart.security.elevatemartsecurity.domain.ElevateMartUser;
 import com.elevatemart.security.elevatemartsecurity.exception.ElevateMartUserCredentialNotFoundException;
-import com.elevatemart.security.elevatemartsecurity.repository.UserRepository;
+import com.elevatemart.security.elevatemartsecurity.repository.ElevateMartUserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -16,10 +16,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-@Service("userDetailService")
+@Service("userService")
 public final class UserDetailsServiceImpl  implements UserDetailsService {
-    @Autowired
-    private UserRepository userRepo;
+    @Autowired(required = true)
+    private ElevateMartUserRepository userRepo;
     private final List<GrantedAuthority> authorityList = new ArrayList<>();
 
     @Override

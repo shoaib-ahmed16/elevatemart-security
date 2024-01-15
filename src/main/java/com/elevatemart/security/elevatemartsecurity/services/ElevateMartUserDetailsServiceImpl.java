@@ -2,23 +2,20 @@ package com.elevatemart.security.elevatemartsecurity.services;
 
 import com.elevatemart.security.elevatemartsecurity.domain.ElevateMartUser;
 import com.elevatemart.security.elevatemartsecurity.exception.DatabaseUnknownServerError;
-import com.elevatemart.security.elevatemartsecurity.exception.ElevateMartNullPointException;
-import com.elevatemart.security.elevatemartsecurity.exception.ElevateMartUserCredentialNotFoundException;
 import com.elevatemart.security.elevatemartsecurity.exception.ElevateMartUserException;
-import com.elevatemart.security.elevatemartsecurity.repository.UserRepository;
+import com.elevatemart.security.elevatemartsecurity.repository.ElevateMartUserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 
 @Slf4j
 @Service(value = "elevateMartUserDetailsService")
 public final class ElevateMartUserDetailsServiceImpl implements  ElevateMartUserDetailsService {
 
     @Autowired
-    private UserRepository userRepo;
+    private ElevateMartUserRepository userRepo;
 
     @Override
     public ElevateMartUser registerUser(ElevateMartUser martUser) {
