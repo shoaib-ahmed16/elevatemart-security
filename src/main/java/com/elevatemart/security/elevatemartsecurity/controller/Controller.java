@@ -1,5 +1,6 @@
 package com.elevatemart.security.elevatemartsecurity.controller;
 
+import com.elevatemart.security.elevatemartsecurity.domain.Authority;
 import com.elevatemart.security.elevatemartsecurity.domain.ElevateMartUser;
 import com.elevatemart.security.elevatemartsecurity.dto.LoginBean;
 import com.elevatemart.security.elevatemartsecurity.services.ElevateMartUserDetailsService;
@@ -9,15 +10,19 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -59,13 +64,13 @@ public class Controller {
     public ResponseEntity<List<ElevateMartUser>> getAllElevateMartUsers(){
         return  new ResponseEntity<List<ElevateMartUser>>(eleMarDetService.getAllMartUserDetails(),HttpStatus.ACCEPTED);
     }
-    // when we are providing the username and password in Authenticate --> basic auth
-//    @GetMapping("/signIn")
-//    public ResponseEntity<String> getLoggedInUserDetailsHandler(Authentication auth){
-//
-//        ElevateMartUser user = eleMarDetService.getMartUserDetailsByEmail(auth.getName());
-//        return new ResponseEntity<>(user.getFirstName()+user.getLastName()+" Logged In Successfully!!!",HttpStatus.ACCEPTED);
-//    }
+//    when we are providing the username and password in Authenticate --> basic auth
+/*      @GetMapping("/signIn")
+        public ResponseEntity<String> getLoggedInUserDetailsHandler(Authentication auth){
+            ElevateMartUser user = eleMarDetService.getMartUserDetailsByEmail(auth.getName());
+            return new ResponseEntity<>(user.getFirstName()+user.getLastName()+" Logged In Successfully!!!",HttpStatus.ACCEPTED);
+        }
+*/
 
     @PostMapping("/signIn")
     public ResponseEntity<String> getLoggedInUserDetailsHandler(@RequestBody LoginBean loginBean, HttpServletRequest request){
@@ -79,9 +84,16 @@ public class Controller {
         }catch (Exception exc){
             return new ResponseEntity<>("Authentication Failed!!!",HttpStatus.BAD_REQUEST);
         }
-//        ElevateMartUser user = eleMarDetService.getMartUserDetailsByEmail(auth.getName());
-//        return new ResponseEntity<>(user.getFirstName()+user.getLastName()+" Logged In Successfully!!!",HttpStatus.ACCEPTED);
     }
+    /*
+    private List<GrantedAuthority> getAuthorities(List<Authority> authorities){
+        List<GrantedAuthority> grantedAuthorities= new ArrayList<>();
+        for(Authority authority:authorities){
+            grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_"+authority.getName()));
+        }
+        return grantedAuthorities;
+    }
+    */
     @PostMapping("/contact")
     public String postDemo1(){
         return  "Not harmful Post operation";

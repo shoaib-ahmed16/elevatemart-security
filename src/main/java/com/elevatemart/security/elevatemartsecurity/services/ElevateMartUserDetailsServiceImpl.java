@@ -1,5 +1,6 @@
 package com.elevatemart.security.elevatemartsecurity.services;
 
+import com.elevatemart.security.elevatemartsecurity.domain.Authority;
 import com.elevatemart.security.elevatemartsecurity.domain.ElevateMartUser;
 import com.elevatemart.security.elevatemartsecurity.exception.DatabaseUnknownServerError;
 import com.elevatemart.security.elevatemartsecurity.exception.ElevateMartUserException;
@@ -20,10 +21,11 @@ public final class ElevateMartUserDetailsServiceImpl implements  ElevateMartUser
     @Override
     public ElevateMartUser registerUser(ElevateMartUser martUser) {
         log.info("Initializing the process to save ElevateMart user details to the database. ElevateMart object: {}", martUser);
-//        if(Objects.isNull(martUser)){
-//            log.info("Request processing halted: The object is empty.");
-//            throw new ElevateMartNullPointException("Getting ElevateMart User Object as null");
-//        }
+
+        List<Authority> authorities= martUser.getAuthorities();
+        for(Authority authority:authorities){
+            authority.setMartUser(martUser);
+        }
         log.info("Saving ElevateMartUser to the database.");
         userRepo.save(martUser);
         log.info("ElevateMartUser successfully saved to the database.");

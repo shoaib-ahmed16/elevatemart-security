@@ -58,6 +58,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST,AUTH_WHITELIST)
                         .permitAll()
                         .requestMatchers("/swagger-ui*/**","v3/api-docs/**").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/api/v1/customers").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.GET,"/api/v1/customer/{email}").hasAuthority("ADMIN2")
                         .anyRequest().authenticated())
                 .csrf(csrf->csrf.csrfTokenRequestHandler(requestAttributeHandler).ignoringRequestMatchers("/api/v1/contact","/api/v1/notice","/api/v1/register","/api/v1/signIn")
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
