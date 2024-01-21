@@ -45,6 +45,8 @@ public final class ElevateMartUserDetailsServiceImpl implements  ElevateMartUser
     public List<ElevateMartUser> getAllMartUserDetails() throws ElevateMartUserException,DatabaseUnknownServerError {
         log.info("Initiating retrieval of ElevateMart all user details from the database.");
         List<ElevateMartUser> martUsers = userRepo.findAll();
+        for(ElevateMartUser e:martUsers)
+            System.out.println(e.getAuthorities());
         log.info("Returning the ElevateMart all user details from the database.");
         return  martUsers;
     }

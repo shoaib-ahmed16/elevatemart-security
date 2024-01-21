@@ -7,11 +7,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Entity
+@Table(name = "elevate_mart_user")
 public class ElevateMartUser {
 
     @Id
@@ -29,7 +33,7 @@ public class ElevateMartUser {
     private String countryCode;
     private String number;
     private String address;
-    private String role;
-
+    @OneToMany(cascade = CascadeType.ALL,fetch =FetchType.EAGER)
+    private List<Authority> authorities = new ArrayList<>();
 
 }

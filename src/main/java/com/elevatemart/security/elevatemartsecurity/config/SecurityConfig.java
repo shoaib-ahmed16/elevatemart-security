@@ -1,21 +1,14 @@
 package com.elevatemart.security.elevatemartsecurity.config;
 
-import com.elevatemart.security.elevatemartsecurity.services.customization.CustomizeAuthenticatioProvider;
-import jakarta.annotation.Resource;
-import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.HeaderWriterLogoutHandler;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
@@ -25,7 +18,6 @@ import org.springframework.security.web.header.writers.ClearSiteDataHeaderWriter
 import org.springframework.security.web.savedrequest.NullRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -41,6 +33,7 @@ public class SecurityConfig {
 //    private UserDetailsService userDetailsService;
     private static final String[] AUTH_WHITELIST = {
             "/api/v1/register", // login point api
+            "/api/v1/signIn"
     };
 
 
@@ -66,17 +59,17 @@ public class SecurityConfig {
                         .permitAll()
                         .requestMatchers("/swagger-ui*/**","v3/api-docs/**").permitAll()
                         .anyRequest().authenticated())
-                .csrf(csrf->csrf.csrfTokenRequestHandler(requestAttributeHandler).ignoringRequestMatchers("/api/v1/contact","/api/v1/notice","/api/v1/register")
+                .csrf(csrf->csrf.csrfTokenRequestHandler(requestAttributeHandler).ignoringRequestMatchers("/api/v1/contact","/api/v1/notice","/api/v1/register","/api/v1/signIn")
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
                 .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
                 .requestCache((cache)->cache.
                         requestCache(nullRequestCache))
                 .formLogin(Customizer.withDefaults())
-                .httpBasic(Customizer.withDefaults())
-                .sessionManagement(session ->session.
-                sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .maximumSessions(2)
-                .maxSessionsPreventsLogin(true));
+                .httpBasic(Customizer.withDefaults());
+//                .sessionManagement(session ->session.
+//                sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//                .maximumSessions(2)
+//                .maxSessionsPreventsLogin(true));
                 //.addFilterBefore(new CORSFilter(),JwtAuthenticationFilter.class)
 //                .addFilterBefore(new JwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
@@ -88,10 +81,9 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-
-//
-//    public void configure(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.userDetailsService(userDetailsService).passwordEncoder(encoder());
-//    }
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
 
 }
