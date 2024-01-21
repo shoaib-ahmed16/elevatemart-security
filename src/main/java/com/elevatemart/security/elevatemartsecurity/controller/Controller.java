@@ -57,4 +57,17 @@ public class Controller {
         ElevateMartUser user = eleMarDetService.getMartUserDetailsByEmail(auth.getName());
         return new ResponseEntity<>(user.getFirstName()+user.getLastName()+" Logged In Successfully!!!",HttpStatus.ACCEPTED);
     }
+    @PostMapping("/contact")
+    public String postDemo1(){
+        return  "Not harmful Post operation";
+    }
+    @PutMapping("/notice")
+    public String postDemo2(){
+        return  "Not harmful Put operation";
+    }
+
+    @PostMapping("/write")
+    public String postDemo3(){
+        return  "harmful Post operation";
+    }
 }
