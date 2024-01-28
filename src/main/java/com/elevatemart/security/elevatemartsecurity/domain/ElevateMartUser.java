@@ -33,7 +33,6 @@ public class ElevateMartUser {
     private String countryCode;
     private String number;
     private String address;
-    @OneToMany(cascade = CascadeType.ALL,fetch =FetchType.EAGER)
-    private List<Authority> authorities = new ArrayList<>();
+    private String role;
 
 }

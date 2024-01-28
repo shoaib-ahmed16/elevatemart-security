@@ -1,12 +1,14 @@
 package com.elevatemart.security.elevatemartsecurity.services;
 
+import com.elevatemart.security.elevatemartsecurity.domain.ROLE;
 import com.elevatemart.security.elevatemartsecurity.domain.ElevateMartUser;
 import com.elevatemart.security.elevatemartsecurity.exception.ElevateMartUserCredentialNotFoundException;
 import com.elevatemart.security.elevatemartsecurity.repository.ElevateMartUserRepository;
-import com.elevatemart.security.elevatemartsecurity.services.customization.CustomizeUserDetails;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -30,7 +32,11 @@ public final class UserDetailsServiceImpl  implements UserDetailsService {
             throw new ElevateMartUserCredentialNotFoundException("Invalid Credentials either username or password is wrong!!!");
         } );
         log.info("User Object returned for Authentication Manager method.");
-//        return new User(userDetail.getEmail(),userDetail.getPassword(),authorityList); // preimplemented class
-        return new CustomizeUserDetails(userDetail); // Customize user class for more control
+        return new User(userDetail.getEmail(),userDetail.getPassword(),getAuthorities(userDetail.getRole()));
+    }
+    private List<GrantedAuthority> getAuthorities(String role){
+        List<GrantedAuthority> grantedAuthorities= new ArrayList<>();
+            grantedAuthorities.add(new SimpleGrantedAuthority(ROLE.PREFIX.getName()+role.toUpperCase()));
+        return grantedAuthorities;
     }
 }

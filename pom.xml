@@ -15,7 +15,7 @@
 	<description>Microservice contains spring-secruity  logics</description>
 	<properties>
 		<java.version>17</java.version>
-		<jjwt.verrsion>0.11.2</jjwt.verrsion>
+		<jjwt.version>0.12.3</jjwt.version>
 		<maven.version>3.8.1</maven.version>
 	</properties>
 	<dependencies>
@@ -63,8 +63,18 @@
 		</dependency>
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-api</artifactId>
+			<version>${jjwt.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-impl</artifactId>
-			<version>${jjwt.verrsion}</version>
+			<version>${jjwt.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-jackson</artifactId>
+			<version>${jjwt.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>jakarta.persistence</groupId>

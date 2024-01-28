@@ -1,7 +1,7 @@
-#logging:
-#  level:
-#    org:
-#      springframework: debug
+logging:
+  level:
+    org:
+      springframework: info
 
 server:
   port: 8888
@@ -22,3 +22,10 @@ spring:
     hibernate:
       ddl-auto: update
     open-in-view: true
+
+
+jwt:
+  security:
+    token:
+      secret_key: helloalfiedUsingSEcurity
+      validity: 3600

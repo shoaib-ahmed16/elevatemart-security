@@ -1,6 +1,5 @@
 package com.elevatemart.security.elevatemartsecurity.services;
 
-import com.elevatemart.security.elevatemartsecurity.domain.Authority;
 import com.elevatemart.security.elevatemartsecurity.domain.ElevateMartUser;
 import com.elevatemart.security.elevatemartsecurity.exception.DatabaseUnknownServerError;
 import com.elevatemart.security.elevatemartsecurity.exception.ElevateMartUserException;
@@ -21,11 +20,6 @@ public final class ElevateMartUserDetailsServiceImpl implements  ElevateMartUser
     @Override
     public ElevateMartUser registerUser(ElevateMartUser martUser) {
         log.info("Initializing the process to save ElevateMart user details to the database. ElevateMart object: {}", martUser);
-
-        List<Authority> authorities= martUser.getAuthorities();
-        for(Authority authority:authorities){
-            authority.setMartUser(martUser);
-        }
         log.info("Saving ElevateMartUser to the database.");
         userRepo.save(martUser);
         log.info("ElevateMartUser successfully saved to the database.");
@@ -47,8 +41,6 @@ public final class ElevateMartUserDetailsServiceImpl implements  ElevateMartUser
     public List<ElevateMartUser> getAllMartUserDetails() throws ElevateMartUserException,DatabaseUnknownServerError {
         log.info("Initiating retrieval of ElevateMart all user details from the database.");
         List<ElevateMartUser> martUsers = userRepo.findAll();
-        for(ElevateMartUser e:martUsers)
-            System.out.println(e.getAuthorities());
         log.info("Returning the ElevateMart all user details from the database.");
         return  martUsers;
     }
