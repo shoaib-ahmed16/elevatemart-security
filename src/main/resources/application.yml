@@ -29,5 +29,5 @@ jwt:
     token:
       secret_key: abMcdefgIhijk4lmnoXpqrsZtuvwxyzYafeA
       validity: 360000
-      issuer: ashoaib@gmail.com
+      issuer: ashoaib.security@gmail.com
       subject: emartSalesPlatform@gmail.com
