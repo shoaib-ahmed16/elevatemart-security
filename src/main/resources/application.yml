@@ -27,5 +27,7 @@ spring:
 jwt:
   security:
     token:
-      secret_key: helloalfiedUsingSEcurity
-      validity: 3600
+      secret_key: abMcdefgIhijk4lmnoXpqrsZtuvwxyzYafeA
+      validity: 360000
+      issuer: ashoaib@gmail.com
+      subject: emartSalesPlatform@gmail.com

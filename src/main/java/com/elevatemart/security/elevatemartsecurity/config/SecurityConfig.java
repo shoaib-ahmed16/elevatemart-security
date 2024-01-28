@@ -28,6 +28,11 @@ import java.util.Collections;
 @Configuration
 public class SecurityConfig {
 
+    @Autowired
+    private JwtTokenGeneratorFilter jwtTokenGeneratorFilter;
+
+    @Autowired
+    private  JwtTokenValidatorFilter jwtTokenValidatorFilter;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -64,8 +69,8 @@ public class SecurityConfig {
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
                 .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
                 .addFilterAfter(new AuthorisedUserLoggingFilter(),BasicAuthenticationFilter.class)
-                .addFilterAfter(new JwtTokenGeneratorFilter(),BasicAuthenticationFilter.class)
-                .addFilterBefore(new JwtTokenValidatorFilter(),BasicAuthenticationFilter.class)
+                .addFilterAfter(jwtTokenGeneratorFilter,BasicAuthenticationFilter.class)
+                .addFilterBefore(jwtTokenValidatorFilter,BasicAuthenticationFilter.class)
                 .requestCache((cache)->cache.
                         requestCache(nullRequestCache))
                 .formLogin(Customizer.withDefaults())

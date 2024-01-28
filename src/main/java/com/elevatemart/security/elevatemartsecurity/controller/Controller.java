@@ -47,6 +47,9 @@ public class Controller {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
+    private JwtTokenGeneratorFilter jwtTokenGeneratorFilter;
+
+    @Autowired
     @Resource(name = "elevateMartUserDetailsService")
     private ElevateMartUserDetailsService eleMarDetService;
 
@@ -89,7 +92,7 @@ public class Controller {
             HttpSession session = request.getSession(true);
             session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, sc);
             log.info("Authenticated User have following authorities: {}",auth.getAuthorities());
-            String jwtToken=JwtTokenGeneratorFilter.getToke(auth);
+            String jwtToken=jwtTokenGeneratorFilter.tokenGenerator(auth);
             response.setHeader(Constants.AUTHORIZATION.getValue(), jwtToken);
             log.info("Authentication token successfully set to the header for the authenticated user: {}", auth.getName());
             LoginResponse loginResponse=new LoginResponse();
