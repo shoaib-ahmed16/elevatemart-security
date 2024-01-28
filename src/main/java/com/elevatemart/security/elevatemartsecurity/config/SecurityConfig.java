@@ -1,6 +1,7 @@
 package com.elevatemart.security.elevatemartsecurity.config;
 
 import com.elevatemart.security.elevatemartsecurity.domain.ROLE;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -27,11 +28,6 @@ import java.util.Collections;
 @Configuration
 public class SecurityConfig {
 
-    private static final String[] AUTH_WHITELIST = {
-            "/api/v1/register", // login point api
-            "/api/v1/signIn"
-    };
-
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -55,8 +51,9 @@ public class SecurityConfig {
                 })
                 .authorizeHttpRequests(authorize->
                     authorize
-                        .requestMatchers(HttpMethod.POST,AUTH_WHITELIST)
+                        .requestMatchers(HttpMethod.POST,"/api/v1/register")
                         .permitAll()
+                        .requestMatchers( "/api/v1/signIn").permitAll()
                         .requestMatchers("/swagger-ui*/**","v3/api-docs/**").permitAll()
                         .requestMatchers(HttpMethod.GET,"/api/v1/customers").hasRole(ROLE.ADMIN.getName())
                         .requestMatchers(HttpMethod.GET,"/api/v1/customer/{email}").hasAnyRole(ROLE.ADMIN.getName(),ROLE.USER.getName())

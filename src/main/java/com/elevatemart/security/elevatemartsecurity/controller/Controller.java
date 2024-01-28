@@ -2,13 +2,20 @@ package com.elevatemart.security.elevatemartsecurity.controller;
 
 import com.elevatemart.security.elevatemartsecurity.config.JwtTokenGeneratorFilter;
 import com.elevatemart.security.elevatemartsecurity.domain.ElevateMartUser;
+import com.elevatemart.security.elevatemartsecurity.dto.Constants;
 import com.elevatemart.security.elevatemartsecurity.dto.LoginBean;
+import com.elevatemart.security.elevatemartsecurity.dto.LoginResponse;
 import com.elevatemart.security.elevatemartsecurity.services.ElevateMartUserDetailsService;
+import com.elevatemart.security.elevatemartsecurity.utils.Response;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,7 +28,9 @@ import org.springframework.security.web.context.HttpSessionSecurityContextReposi
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/v1")
 public class Controller {
@@ -70,19 +79,27 @@ public class Controller {
 */
 
     @PostMapping("/signIn")
-    public ResponseEntity<String> getLoggedInUserDetailsHandler(@RequestBody LoginBean loginBean, HttpServletRequest request) {
+    public Response<LoginResponse> getLoggedInUserDetailsHandler(@RequestBody LoginBean loginBean, HttpServletRequest request, HttpServletResponse response) {
         try {
+            log.info("Initializing user authentication process for sign-in.");
             Authentication auth = authManager.authenticate(new UsernamePasswordAuthenticationToken(loginBean.getUsername(), loginBean.getPassword()));
             SecurityContext sc = SecurityContextHolder.getContext();
             sc.setAuthentication(auth);
             HttpSession session = request.getSession(true);
             session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, sc);
-            String token=new JwtTokenGeneratorFilter().tokenGenerator(auth);
-            return new ResponseEntity<>(loginBean.getUsername()+" Authenitcation successFully!!!", HttpStatus.ACCEPTED);
+            log.info("Authenticated User have following authorities: {}",auth.getAuthorities());
+            String jwtToken=JwtTokenGeneratorFilter.getToke(auth);
+            response.setHeader(Constants.JWT_HEADER.getValue(), jwtToken);
+            log.info("Authentication token successfully set to the header for the authenticated user: {}", auth.getName());
+            LoginResponse loginResponse=new LoginResponse();
+            loginResponse.setAuthenticated(auth.getName()+"Authenticated SuccessFully!!!");
+            loginResponse.setJwtToken(jwtToken);
+            return new Response(loginResponse, HttpStatus.ACCEPTED, HttpStatus.ACCEPTED.value());
         } catch (Exception exc) {
-            return new ResponseEntity<>("Authentication Failed!!!", HttpStatus.BAD_REQUEST);
+            return new Response("Authentication Failed!!!", HttpStatus.BAD_REQUEST,HttpStatus.BAD_REQUEST.value());
         }
     }
+
     @PostMapping("/contact")
     public String postDemo1(){
         return  "Not harmful Post operation";

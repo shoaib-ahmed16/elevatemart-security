@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -39,9 +40,12 @@ public class JwtTokenGeneratorFilter extends OncePerRequestFilter {
             log.info("Authenticated User have following authorities: {}",auth.getAuthorities());
             String jwtToken = tokenGenerator(auth);
             response.setHeader(Constants.JWT_HEADER.getValue(),jwtToken);
+            log.info("Authentication token successfully set to the header for the authenticated user: {}", auth.getName());
         }
         filterChain.doFilter(request,response);
-
+    }
+    public static String getToke(Authentication auth){
+        return new JwtTokenGeneratorFilter().tokenGenerator(auth);
     }
     public String tokenGenerator(Authentication auth){
         SecretKey secretKey = Keys.hmacShaKeyFor(JWT_SECRET_KEY.getBytes());
@@ -54,7 +58,7 @@ public class JwtTokenGeneratorFilter extends OncePerRequestFilter {
                 .expiration(new Date(new Date().getTime()+TOKEN_VALIDITY))
                 .signWith(secretKey).compact();
     }
-    private  String populateAuthorities(Collection <? extends GrantedAuthority> collection){
+    private   String populateAuthorities(Collection <? extends GrantedAuthority> collection){
         Set<String> authoritesSet= new HashSet<>();
         for(GrantedAuthority authority:collection){
             authoritesSet.add(authority.getAuthority());
