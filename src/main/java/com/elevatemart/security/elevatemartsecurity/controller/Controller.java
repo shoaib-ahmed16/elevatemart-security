@@ -22,6 +22,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
@@ -89,7 +90,7 @@ public class Controller {
             session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, sc);
             log.info("Authenticated User have following authorities: {}",auth.getAuthorities());
             String jwtToken=JwtTokenGeneratorFilter.getToke(auth);
-            response.setHeader(Constants.JWT_HEADER.getValue(), jwtToken);
+            response.setHeader(Constants.AUTHORIZATION.getValue(), jwtToken);
             log.info("Authentication token successfully set to the header for the authenticated user: {}", auth.getName());
             LoginResponse loginResponse=new LoginResponse();
             loginResponse.setAuthenticated(auth.getName()+"Authenticated SuccessFully!!!");
@@ -112,5 +113,10 @@ public class Controller {
     @PostMapping("/write")
     public String postDemo3(){
         return  "harmful Post operation";
+    }
+
+    @GetMapping("/userDetails")
+    public ResponseEntity<UserDetails> getUserDetail(String username){
+        return  new ResponseEntity<>(userService.loadUserByUsername(username),HttpStatus.OK);
     }
 }

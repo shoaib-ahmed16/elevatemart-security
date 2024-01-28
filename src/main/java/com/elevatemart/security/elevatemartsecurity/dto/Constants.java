@@ -2,7 +2,7 @@ package com.elevatemart.security.elevatemartsecurity.dto;
 
 public enum Constants {
 
-    JWT_HEADER("Authorization"),
+    AUTHORIZATION("Authorization"),
     TOKEN_PREFIX("Bearer "),
     JWT_SUBJECT("JWT TOKEN"),
     JWT_ISSUER("Elevate Mart Security"),

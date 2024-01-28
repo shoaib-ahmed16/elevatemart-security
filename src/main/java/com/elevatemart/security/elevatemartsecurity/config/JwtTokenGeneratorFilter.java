@@ -26,7 +26,7 @@ public class JwtTokenGeneratorFilter extends OncePerRequestFilter {
 
 
 //    @Value("${jwt.security.token.validity}")
-    public final Long TOKEN_VALIDITY=3600000L;
+    public final Long TOKEN_VALIDITY=3600000000000000L;
 
 //     @Value("${jwt.security.token.secret_key}")
     private final   String JWT_SECRET_KEY ="abMcdefgIhijk4lmnoXpqrsZtuvwxyzYafeA";
@@ -39,7 +39,7 @@ public class JwtTokenGeneratorFilter extends OncePerRequestFilter {
         if(auth!=null){
             log.info("Authenticated User have following authorities: {}",auth.getAuthorities());
             String jwtToken = tokenGenerator(auth);
-            response.setHeader(Constants.JWT_HEADER.getValue(),jwtToken);
+            response.setHeader(Constants.AUTHORIZATION.getValue(),jwtToken);
             log.info("Authentication token successfully set to the header for the authenticated user: {}", auth.getName());
         }
         filterChain.doFilter(request,response);

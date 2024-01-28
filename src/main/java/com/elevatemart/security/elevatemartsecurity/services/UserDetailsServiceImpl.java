@@ -22,7 +22,6 @@ import java.util.List;
 public final class UserDetailsServiceImpl  implements UserDetailsService {
     @Autowired(required = true)
     private ElevateMartUserRepository userRepo;
-    private final List<GrantedAuthority> authorityList = new ArrayList<>();
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

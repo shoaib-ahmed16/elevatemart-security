@@ -9,6 +9,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -24,10 +25,12 @@ public class JwtTokenValidatorFilter extends OncePerRequestFilter {
 //    @Value("${jwt.security.token.secret_key}")
     private final String JWT_SECRET_KEY ="abMcdefgIhijk4lmnoXpqrsZtuvwxyzYafeA";
 
+
+
     @Override
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain filterChain) throws ServletException, IOException {
 
-        String header = req.getHeader(Constants.JWT_HEADER.getValue());
+        String header = req.getHeader(Constants.AUTHORIZATION.getValue());
         String username = null;
         String authToken = null;
         String authorities;
