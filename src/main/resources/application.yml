@@ -1,0 +1,33 @@
+logging:
+  level:
+    org:
+      springframework: info
+
+server:
+  port: 8888
+#  servlet:
+#    context-path: /product-service-elevatemart
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/elevatemart
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  data:
+    jdbc:
+      repositories:
+        enabled: false
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: true
+
+
+jwt:
+  security:
+    token:
+      secret_key: abMcdefgIhijk4lmnoXpqrsZtuvwxyzYafeA
+      validity: 360000
+      issuer: ashoaib.security@gmail.com
+      subject: emartSalesPlatform@gmail.com
