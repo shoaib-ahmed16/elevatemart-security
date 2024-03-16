@@ -60,7 +60,8 @@ public class JwtTokenGeneratorFilter extends OncePerRequestFilter {
                 .claim(Constants.AUTHORITIES.getValue(), populateAuthorities(auth.getAuthorities()))
                 .issuedAt(new Date())
                 .expiration(new Date(new Date().getTime()+TOKEN_VALIDITY))
-                .signWith(secretKey).compact();
+                .signWith(secretKey)
+                .compact();
     }
     private   String populateAuthorities(Collection <? extends GrantedAuthority> collection){
         Set<String> authoritesSet= new HashSet<>();

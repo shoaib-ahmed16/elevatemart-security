@@ -21,6 +21,7 @@ public final class ElevateMartUserDetailsServiceImpl implements  ElevateMartUser
     public ElevateMartUser registerUser(ElevateMartUser martUser) {
         log.info("Initializing the process to save ElevateMart user details to the database. ElevateMart object: {}", martUser);
         log.info("Saving ElevateMartUser to the database.");
+        martUser.setRole(martUser.getRole().toUpperCase());
         userRepo.save(martUser);
         log.info("ElevateMartUser successfully saved to the database.");
         return martUser;
