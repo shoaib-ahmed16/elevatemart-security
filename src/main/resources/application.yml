@@ -5,8 +5,6 @@ logging:
 
 server:
   port: 8888
-#  servlet:
-#    context-path: /product-service-elevatemart
 
 spring:
   datasource:
