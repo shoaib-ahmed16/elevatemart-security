@@ -13,5 +13,15 @@
 	<name>elevatemart-security</name>
 	<description>Elevate mart security service</description>
 
+	<properties>
+		<eureka.netfix.clien.version>4.1.0</eureka.netfix.clien.version>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+			<version>${eureka.netfix.clien.version}</version>
+		</dependency>
+	</dependencies>
 
 </project>
