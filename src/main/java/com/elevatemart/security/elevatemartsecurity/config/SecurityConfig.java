@@ -56,16 +56,16 @@ public class SecurityConfig {
                 })
                 .authorizeHttpRequests(authorize->
                     authorize
-                        .requestMatchers(HttpMethod.POST,"/api/v1/register")
+                        .requestMatchers(HttpMethod.POST,"/api/v1/security/register")
                         .permitAll()
-                        .requestMatchers( "/api/v1/signIn").permitAll()
+                        .requestMatchers( "/api/v1/security/signIn").permitAll()
                         .requestMatchers("/swagger-ui*/**","v3/api-docs/**").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/api/v1/customers").hasRole(ROLE.ADMIN.getName())
-                        .requestMatchers(HttpMethod.GET,"/api/v1/customer/{email}").hasAnyRole(ROLE.ADMIN.getName(),ROLE.USER.getName())
+                        .requestMatchers(HttpMethod.GET,"/api/v1/security/customers").hasRole(ROLE.ADMIN.getName())
+                        .requestMatchers(HttpMethod.GET,"/api/v1/security/customer/{email}").hasAnyRole(ROLE.ADMIN.getName(),ROLE.USER.getName())
                         .anyRequest().authenticated())
                 .csrf(csrf->
                     csrf
-                        .csrfTokenRequestHandler(requestAttributeHandler).ignoringRequestMatchers("/api/v1/contact","/api/v1/notice","/api/v1/register","/api/v1/signIn")
+                        .csrfTokenRequestHandler(requestAttributeHandler).ignoringRequestMatchers("/api/v1/security/contact","/api/v1/security/notice","/api/v1/security/register","/api/v1/security/signIn")
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
                 .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
                 .addFilterAfter(new AuthorisedUserLoggingFilter(),BasicAuthenticationFilter.class)
