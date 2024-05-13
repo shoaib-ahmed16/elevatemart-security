@@ -4,15 +4,30 @@
 
 
 ### Tech Stack
-### Java | Spring Boot  | Spring Security | Lambok
+### Java | Spring Boot  | Spring Security | Lambok | eureka discovery/client | Spring Gateway
 
 ## This is my first microservice for my personal Elevatemart e-commerce backend server.
 
 ## Second microservice is Product-service
 https://github.com/shoaib-ahmed16/elevatemart-products-service.git
+This service conatins the cruds for products
 
-## Third microservice is Product-service
+## Third microservice is Cart-service
 https://github.com/shoaib-ahmed16/elevatemart-cart-service.git
+This service conatins the cruds for carts
 
 ## Fourth microservice is Payment-service
 https://github.com/shoaib-ahmed16/elevatemart-payment-service.git
+This service will contain the logic for payment receiving for the cart order.
+
+## Fifth repository contains the Parents Pom file dependencies
+https://github.com/shoaib-ahmed16/elevatemart-service-bom.git
+This repository contains the parent pom file dependencies which is commonly used in the dependent services.
+
+## Sixth repository eureka discovery
+https://github.com/shoaib-ahmed16/elevatemart-eureka-service.git
+This Service play the role of service discovery and registrying as eureka client
+
+## Seventh repository Api Gateway
+https://github.com/shoaib-ahmed16/elevatemart-api-gateway.git
+This service contains the Api gateway and loadbalancer logic for all the main services 
